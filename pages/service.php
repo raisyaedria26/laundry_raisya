@@ -29,7 +29,7 @@
           </div>
           <div class="card-body">
             <div class="d-flex justify-content-end p-2">
-              <a href="?page=tambah-service" class="btn btn-primary"> <i class="bi bi-plus-circle"></i> Tambah</a>
+              <a href="?page=tambah-service" class="btn btn-primary"> <i class="bi bi-plus-circle"></i> Add</a>
             </div>
             <table class="table table-bordered table-striped">
               <tr>

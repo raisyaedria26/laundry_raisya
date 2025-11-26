@@ -29,7 +29,7 @@ if (isset($_GET['delete'])) {
         </div>
         <div class="card-body+">
           <div class="d-flex justify-content-end m-3">
-            <a href="?page=tambah-menu" class="btn btn-primary">Add Menus</a>
+            <a href="?page=tambah-menu" class="btn btn-primary"> <i class="bi bi-plus-circle"></i> Add Menu</a>
           </div>
           <table class="table table-bordered table-striped">
             <tr>

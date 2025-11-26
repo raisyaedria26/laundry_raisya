@@ -6,20 +6,20 @@
 // require_once 'config/koneksi.php';
 
 $query = mysqli_query($config, "SELECT l.name as level_name, u.* FROM users u
-LEFT JOIN levels l ON l.id = u.level_id ORDER BY u.id DESC");+
+LEFT JOIN levels l ON l.id = u.level_id ORDER BY u.id DESC");
 $users = mysqli_fetch_all($query, mode: MYSQLI_ASSOC);
 
 // disini parameter delete
 // $_GET 
 // isset, empty
 if (isset($_GET['delete'])) {
-    $id = $_GET['delete'];
-    $delete = mysqli_query($config, "DELETE FROM users WHERE id = $id");
-    // redirect
-    header("location:?page=user&hapus=berhasil");
+  $id = $_GET['delete'];
+  $delete = mysqli_query($config, "DELETE FROM users WHERE id = $id");
+  // redirect
+  header("location:?page=user&hapus=berhasil");
 }
 ?>
- 
+
 <div class="row">
   <div class="col-sm-12">
     <div class="card">

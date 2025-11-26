@@ -1,20 +1,13 @@
   <?php
-  $p_query = mysqli_query($koneksi, "SELECT * FROM orders ORDER BY id DESC");
-  $products = mysqli_fetch_all($p_query, MYSQLI_ASSOC);
+  $query = mysqli_query($config, "SELECT c.name, `to`.* FROM trans_orders `to` LEFT JOIN customers c ON c.id = to.customer_id ORDER BY `to`.id DESC");
+  $rows = mysqli_fetch_all($query, MYSQLI_ASSOC);
 
   if (isset($_GET['delete'])) {
-    $id     = $_GET['delete'];
+    $id = $_GET['delete'];
 
-    $s_photo  = mysqli_query($koneksi, "SELECT product_photo FROM products WHERE id = $id");
-    $row      = mysqli_fetch_assoc($s_photo);
-    $filePath = $row['product_photo'];
-
-    if (file_exists($filePath)) {
-      unlink($filePath);
-    }
-    $delete = mysqli_query($koneksi, "DELETE FROM products WHERE id = $id");
+    $delete = mysqli_query($config, "DELETE FROM trans_orders WHERE id = $id");
     if ($delete) {
-      header("location:?page=product");
+      header("location:?page=order");
     }
   }
   ?>
@@ -31,31 +24,33 @@
     <div class="row">
       <div class="col-sm-12">
         <div class="card">
-          <div class="card-header">
-            <h3 class="card-title">Data Products</h3>
-          </div>
+          <h3 class="card-title">Data Order</h3>
           <div class="card-body">
             <div class="d-flex justify-content-end p-2">
-              <a href="pos/add-pos.php" class="btn btn-primary"> <i class="bi bi-plus-circle"></i>Add POS</a>
+              <a href="pos/add-order.php" class="btn btn-primary"> <i class="bi bi-plus-circle"></i>Add Order</a>
             </div>
             <table class="table table-bordered table-striped">
               <tr>
                 <th>No</th>
                 <th>Order Code</th>
-                <th>Order Date</th>
-                <th>Order Ammount</th>
+                <th>Order End Date</th>
+                <th>Order Amount</th>
+                <th>Order Tax</th>
+                <th>Order Pay</th>
                 <th>Order Change</th>
                 <th>Status</th>
                 <th>Actions</th>
               </tr>
               <?php
-              foreach ($products as $key => $value) {
+              foreach ($query as $key => $value) {
               ?>
                 <tr>
                   <td><?php echo $key + 1 ?></td>
                   <td><?php echo $value['order_code'] ?></td>
-                  <td><?php echo $value['order_date'] ?></td>
-                  <td><?php echo $value['order_amount'] ?></td>
+                  <td><?php echo $value['order_end_date'] ?></td>
+                  <td><?php echo $value['order_total'] ?></td>
+                  <td><?php echo $value['order_tax'] ?></td>
+                  <td><?php echo $value['order_pay'] ?></td>
                   <td><?php echo $value['order_change'] ?></td>
                   <td><?php echo $value['order_status'] ?></td>
                   <td>
