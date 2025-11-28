@@ -48,7 +48,7 @@
                         class="bi bi-pencil"></i></a>
                     <a href="?page=tax&delete=<?php echo $value['id'] ?>"
                       onclick="return confirm('Are you sure you want to delete this data?')"
-                      class="btn btn-warning btn-sm"><i class="bi bi-trash"></i></a>
+                      class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></a>
                   </td>
 
                 </tr>

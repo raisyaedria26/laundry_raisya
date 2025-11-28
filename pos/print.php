@@ -1,12 +1,15 @@
 <?php
 session_start();
-include "../config/koneksi.php";
-$query = mysqli_query($koneksi, "SELECT * FROM orders ORDER BY id DESC");
+include "../config/config.php";
+$id = $_GET['id'] ?? '';
+$id = isset($_GET['id']) ? $_GET['id'] : '';
+
+$query = mysqli_query($config, "SELECT * FROM trans_orders ORDER BY id DESC");
 $row = mysqli_fetch_assoc($query);
 
 $order_id = $row['id'];
-$querrDetails = mysqli_query($koneksi, "SELECT p.product_name,od.* FROM order_details AS od LEFT JOIN products as p ON p.id = od.product_id WHERE order_id = '$order_id'");
-$rowDetails = mysqli_fetch_all($querrDetails, MYSQLI_ASSOC);
+$queryDetails = mysqli_query($config, "SELECT s.name, od.* FROM trans_order_details AS od LEFT JOIN services s ON s.id = od.service_id WHERE order_id = '$order_id'");
+$rowDetails = mysqli_fetch_all($queryDetails, MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -15,7 +18,7 @@ $rowDetails = mysqli_fetch_all($querrDetails, MYSQLI_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Struk Pembayaraan</title>
+    <title>Laundry Transaction Struck</title>
     <style>
         body {
             width: 80mm;
@@ -122,7 +125,7 @@ $rowDetails = mysqli_fetch_all($querrDetails, MYSQLI_ASSOC);
 <body onload="window.print()">
     <div class="struck-page">
         <div class="header">
-            <h2>Struk Pembayaraan</h2>
+            <h2>Payment Struck</h2>
             <p>Jl Benhil Karet Jakarta pusat</p>
             <p>08979377325</p>
         </div>
@@ -141,7 +144,7 @@ $rowDetails = mysqli_fetch_all($querrDetails, MYSQLI_ASSOC);
                 <span><?= $row['order_code'] ?></span>
             </div>
             <div class="info-row">
-                <span>Casher Name</span>
+                <span>Cashier Name</span>
                 <span><?= $_SESSION['NAME'] ?></span>
             </div>
         </div>
@@ -149,9 +152,9 @@ $rowDetails = mysqli_fetch_all($querrDetails, MYSQLI_ASSOC);
         <div class="items">
             <?php foreach ($rowDetails as $item): ?>
                 <div class="item">
-                    <span class="item-name"><?= $item['product_name'] ?></span>
+                    <span class="item-name"><?= $item['name'] ?></span>
                     <span class="item-qty"><?= $item['qty'] ?></span>
-                    <span class="item-price">Rp<?= number_format($item['order_price']) ?></span>
+                    <span class="item-price">Rp<?= number_format($item['price']) ?></span>
                 </div>
             <?php endforeach; ?>
         </div>
@@ -170,16 +173,16 @@ $rowDetails = mysqli_fetch_all($querrDetails, MYSQLI_ASSOC);
         <div class="payment">
             <div class="total-row grand">
                 <span>Total</span>
-                <span>Rp.<?= number_format($row['order_amount'])  ?></span>
+                <span>Rp.<?= number_format($row['order_total']) ?></span>
             </div>
-            <!-- <div class="total-row">
-        <span>Cash</span>
-        <span>Rp.100.000</span>
-      </div>
-      <div class="total-row">
-        <span>Cahnge</span>
-        <span>Rp.50.000</span>
-      </div> -->
+            <div class="total-row">
+                <span>Cash</span>
+                <span>Rp.<?= number_format($row['order_pay']) ?></span>
+            </div>
+            <div class="total-row">
+                <span>Change</span>
+                <span>Rp.<?= number_format($row['order_change']) ?></span>
+            </div>
         </div>
         <div class="separator"></div>
     </div>

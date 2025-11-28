@@ -24,10 +24,10 @@
     <div class="row">
       <div class="col-sm-12">
         <div class="card">
-          <h3 class="card-title">Data Order</h3>
           <div class="card-body">
+            <h3 class="card-title">Data Order</h3>
             <div class="d-flex justify-content-end p-2">
-              <a href="pos/add-order.php" class="btn btn-primary"> <i class="bi bi-plus-circle"></i>Add Order</a>
+              <a href="pos/add-order.php" class="btn btn-primary"> <i class="bi bi-plus-circle"></i> Add Order</a>
             </div>
             <table class="table table-bordered table-striped">
               <tr>
@@ -54,11 +54,10 @@
                   <td><?php echo $value['order_change'] ?></td>
                   <td><?php echo $value['order_status'] ?></td>
                   <td>
-                    <a class="btn btn-success btn-sm" href="?page=tambah-product&edit=<?php echo $value['id'] ?>" class="btn btn-success btn-sm">
-                      <i class="bi bi-pencil"></i>
+                    <a href="pos/print.php?id=<?php echo $value['id'] ?>" class="btn btn-success btn-sm" class="btn btn-success btn-sm">
+                      <i class="bi bi-printer"></i>
                     </a>
-                    <a class="btn btn-danger btn-sm" onclick="return confirm('Apakah anda yakin akan menghapus')"
-                      href="?page=product&delte=<?php echo $value['id'] ?> ">
+                    <a href="?page=order&delete=<?php echo $value['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah anda yakin akan menghapus')">
                       <i class="bi bi-trash"></i>
                     </a>
                   </td>

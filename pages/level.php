@@ -46,7 +46,7 @@ if (isset($_GET['delete'])) {
                 <td class="d-flex gap-2">
                   <a class="btn btn-warning" href="?page=add-role-menu&edit=<?php echo $level['id'] ?>"><i class="bi bi-plus"></i></a>
 
-                  <a class="btn btn-primary" href="?page=tambah-level&edit=<?php echo $level['id'] ?>"><i class="bi bi-pencil"></i></a>
+                  <a class="btn btn-success" href="?page=tambah-level&edit=<?php echo $level['id'] ?>"><i class="bi bi-pencil"></i></a>
 
 
                   <form action="?page=level&delete=<?php echo $level['id'] ?>" method="post" onclick="return confirm('Apakah ingin di hapus?')">

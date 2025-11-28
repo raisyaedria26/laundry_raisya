@@ -19,7 +19,7 @@ body {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #90CAF9;
+  background-color: #cfeaff;
 }
 
 .product-card {
@@ -54,16 +54,16 @@ body {
 .search-box {
   border-radius: 25px;
   padding: 10px 10px;
-  border: 2px solid #77BEF0;
+  border: 1px solid #0a2e47;
 }
 
 .cart-header {
-  background-color: #BBDEFB;
+  background-color: #b9e1ff;
   color: black;
   box-shadow: 0 0 3px #e5e5e5;
-  border: 1px solid #77BEF0 ;
+  /* border: 1px solid #77BEF0; */
   padding: 20px;
-  border-radius: 1rem;
+  border-radius: 10px;
 }
 
 
@@ -92,6 +92,12 @@ body {
 
 .btn-checkout {
   border: none;
+  padding: 15px;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.btn-clear-cart {
   padding: 15px;
   font-size: 1.1rem;
   font-weight: bold;

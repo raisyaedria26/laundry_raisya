@@ -48,7 +48,7 @@
                   <td><?php echo "Rp." . number_format($value['price'], 2, ",", ".") ?></td>
                   <td><?php echo $value['description'] ?></td>
                   <td>
-                    <a href="?page=tambah-service&edit= <?= $value['id'] ?>" class="btn btn-primary btn-sm">
+                    <a href="?page=tambah-service&edit= <?= $value['id'] ?>" class="btn btn-success btn-sm">
                       <i class="bi bi-pencil"></i>
                     </a>
                     <a href="?page=service&delete=<?= $value['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Ingin delete?')">

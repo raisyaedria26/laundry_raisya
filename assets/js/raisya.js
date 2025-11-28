@@ -89,77 +89,47 @@
 // card.appendChild(p);
 // // foreach($buttons as $btn){}
 
-let currentCategory = 'all';
+let currentCategory = "all";
 
-function filterCategory(category, event) {
-  currentCategory = category;
+function selectCustomers() {
+  const select = document.getElementById("customer_id");
+  const phone = select.options[select.selectedIndex].getAttribute("data-phone");
 
-  let buttons = document.querySelectorAll('.category-btn');
-  buttons.forEach((btn) => {
-    btn.classList.remove('active');
-    btn.classList.remove('btn-primary');
-    btn.classList.add('btn-outline-primary');
-  });
-  event.classList.add('active');
-  event.classList.remove('btn-outline-primary');
-  event.classList.add('btn-primary');
-  console.log({
-    currentCategory: currentCategory,
-    category: category,
-    event: event,
-  });
-
-  renderProducts();
+  document.getElementById("phone").value = phone || "";
 }
 
-function renderProducts(searchProduct = '') {
-  const productGrid = document.getElementById('productGrid');
-  productGrid.innerHTML = '';
-
-  // filter
-  const filtered = products.filter((p) => {
-    // shorthand / ternary
-    const matchCategory =
-      currentCategory === 'all' || p.category_name === currentCategory;
-    const matchSearch = p.product_name.toLowerCase().includes(searchProduct);
-    return matchCategory && matchSearch;
-  });
-
-  // munculin data dari table products
-  filtered.forEach((product) => {
-    const col = document.createElement('div');
-    col.className = 'col-md-4 col-sm-6';
-    col.innerHTML = `<div class="card product-card" onclick="addToCart(${product.id})">
-
-        <div class="product-img">
-          <img class="w-100" src="../${product.product_photo}" alt="" width="100%">
-        </div>
-        <div class="card-body">
-          <span class="badge bg-secondary badge-category">${product.category_name}</span>
-          <h6 class="card-title mt-2 mb-2">${product.product_name}</h6>
-          <p class="card-text text-primary fw-bold">Rp.${product.product_price}</p>
-        </div>
-      </div>`;
-    productGrid.appendChild(col);
-  });
+function openModal(service) {
+  document.getElementById("modal_id").value = service.id;
+  document.getElementById("modal_name").value = service.name;
+  document.getElementById("modal_price").value = service.price;
+  document.getElementById("modal_qty").value = service.qty;
 }
 
 let cart = [];
-function addToCart(id) {
-  const product = products.find((p) => p.id == id);
+
+function addToCart() {
+  const id = document.getElementById("modal_id").value;
+  const name = document.getElementById("modal_name").value;
+  const price = parseFloat(document.getElementById("modal_price").value);
+  const qty = parseFloat(document.getElementById("modal_qty").value);
 
   const existing = cart.find((item) => item.id == id);
   if (existing) {
-    existing.quantity += 1;
+    existing.qty += qty;
   } else {
-    cart.push({ ...product, quantity: 1 });
+    cart.push({
+      id,
+      name,
+      price,
+      qty,
+    });
   }
   renderCart();
 }
 
 function renderCart() {
-  const cartContainer = document.querySelector('#cartItems');
-  cartContainer.innerHTML = '';
+  const cartContainer = document.querySelector("#cartItems");
+  cartContainer.innerHTML = "";
 
   if (cart.length === 0) {
     cartContainer.innerHTML = `<div class="cart-items" id="cartItems">
@@ -171,18 +141,16 @@ function renderCart() {
     updateTotal();
   }
   cart.forEach((item, index) => {
-    const div = document.createElement('div');
+    const div = document.createElement("div");
     div.className =
-      'cart-item d-flex justify-content-between align-items-center mb-2';
+      "cart-item d-flex justify-content-between align-items-center mb-2";
     div.innerHTML = `
             <div>
-            <strong>${item.product_name}</strong>  
-            <small>${item.product_price}</small>  
+            <strong>${item.name}</strong>  
+            <small>${item.price}</small>  
           </div>
           <div class="d-flex align-items-center">
-            <button class="btn btn-outline-secondary me-2" onclick="changeQty(${item.id}, -1)">-</button>
-            <span>${item.quantity}</span>
-            <button class="btn btn-outline-secondary ms-3" onclick="changeQty(${item.id}, 1)">+</button>  
+            <span>${item.qty}</span> 
             <button class="btn btn-sm btn-danger ms-3" onclick="removeItem(${item.id})">
               <i class="bi bi-trash"></i>
             </button>  
@@ -190,6 +158,7 @@ function renderCart() {
     cartContainer.appendChild(div);
   });
   updateTotal();
+  calculateChange();
 }
 //hapus item dari cart
 function removeItem(id) {
@@ -202,74 +171,103 @@ function changeQty(id, x) {
   if (!item) {
     return;
   }
-  item.quantity += x;
-  if (item.quantity <= 0) {
-    alert('minuman harus 1 product');
-    item.quantity += 1;
+  item.qty += x;
+  if (item.qty <= 0) {
+    alert("minuman harus 1 product");
+    item.qty += 1;
     // cart = filter ((p) => p.id != id);
   }
   renderCart();
 }
 function updateTotal() {
+  const qty = parseFloat(document.getElementById("modal_qty").value) || 0;
+  const price = parseFloat(document.getElementById("modal_price").value) || 0;
   const subtotal = cart.reduce(
-    (sum, item) => sum + item.product_price * item.quantity,
+    (sum, item) => sum + parseFloat(item.price) * parseFloat(item.qty),
     0
   );
-  const tax = subtotal * 0.1;
+  const taxValue = document.querySelector(".tax").value;
+  let tax = taxValue / 100;
+  // console.log(tax);
+  tax = subtotal * tax;
   const total = tax + subtotal;
 
   document.getElementById(
-    'subtotal'
+    "subtotal"
   ).textContent = `Rp. ${subtotal.toLocaleString()}`;
-  document.getElementById('tax').textContent = `Rp. ${tax.toLocaleString()}`;
-  document.getElementById('total').textContent = `Rp. ${total.toLocaleString()}`;
+  document.getElementById("tax").textContent = `Rp. ${tax.toLocaleString()}`;
+  document.getElementById(
+    "total"
+  ).textContent = `Rp. ${total.toLocaleString()}`;
   // console.log(subtotal);
   // console.log(tax);
   // console.log(total);
 
-  document.getElementById('subtotal_value').value = subtotal;
-  document.getElementById('tax_value').value = tax;
-  document.getElementById('total_value').value = total;
+  document.getElementById("subtotal_value").value = subtotal;
+  document.getElementById("tax_value").value = tax;
+  document.getElementById("total_value").value = total;
 }
-document.getElementById('clearCart').addEventListener('click', function (e) {
+document.getElementById("clearCart").addEventListener("click", function (e) {
   cart = [];
   renderCart();
 });
 
 async function processPayment() {
   if (cart.length === 0) {
-    alert('Cart Masih Kosong');
+    alert("Cart Masih Kosong");
     return;
   }
-  const order_code = document.querySelector('.orderNumber').textContent.trim();
-  const subtotal = document.querySelector('#subtotal_value').value.trim();
-  const tax = document.querySelector('#tax_value').value.trim();
-  const grandTotal = document.querySelector('#total_value').value.trim();
+  const order_code = document.querySelector(".orderNumber").textContent.trim();
+  const subtotal = document.querySelector("#subtotal_value").value.trim();
+  const tax = document.querySelector("#tax_value").value.trim();
+  const grandTotal = document.querySelector("#total_value").value.trim();
+  const customer_id = parseInt(document.getElementById("customer_id").value);
+  const end_date = document.getElementById("end_date").value;
+  const order_pay = document.getElementById("pay").value;
+  const order_change = document.getElementById("change").value;
+
+  // console.log({ customer_id, end_date });
   try {
-    const res = await fetch('add-pos.php?payment', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ cart, order_code, subtotal, tax, grandTotal }),
+    const res = await fetch("add-order.php?payment", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        cart,
+        order_code,
+        subtotal,
+        tax,
+        grandTotal,
+        customer_id,
+        end_date,
+        order_pay,
+        order_change,
+      }),
     });
     const data = await res.json();
-    if (data.status == 'success') {
-      alert('Transaction success');
-      window.location.href = 'print.php';
+    if (data.status == "success") {
+      alert("Transaction success");
+      window.location.href = "print.php?id=" + data.order_id;
     } else {
-      alert('Transaction failed', data.message);
+      alert("Transaction failed", data.message);
     }
     // const data = await res.json();
   } catch (error) {
-    alert('Ups! Transaction failed!');
-    console.log('error', error);
+    alert("Ups! Transaction failed!");
+    console.log("error", error);
   }
+}
+
+function calculateChange() {
+  const total = document.getElementById("total_value").value;
+  const pay = parseFloat(document.getElementById("pay").value);
+
+  const change = pay - total;
+  if (change < 0) {
+    change = 0;
+  }
+  document.getElementById("change").value = change;
 }
 // useEffect(() => {
 // }, [])
 
 // DomConterrLoaded   : akan meload function pertama kali
-renderProducts();
-document.getElementById('searchProduct').addEventListener('input', function (e) {
-  const searchProduct = e.target.value.toLowerCase();
-  renderProducts(searchProduct);
-});
